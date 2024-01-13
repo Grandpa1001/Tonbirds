@@ -11,6 +11,8 @@ async function init() {
   
     const wallet = await openWallet(process.env.MNEMONIC!.split(" "), true);
     console.log("Started uploading images to IPFS...");
+    
+    
     const imagesIpfsHash = await uploadFolderToIPFS(imagesFolderPath);
     console.log(
       `Successfully uploaded the pictures to ipfs: https://gateway.pinata.cloud/ipfs/${imagesIpfsHash}`
@@ -19,6 +21,7 @@ async function init() {
     const files = await readdir(metadataFolderPath);
     files.pop();
     let index = 0;
+    //todo add instance
 
   }
   
