@@ -1,7 +1,8 @@
 
-  import { internal, SendMode } from "ton-core";
+  import { internal, SendMode, Address } from "ton-core";
   import { OpenedWallet } from "utils";
   import { NftCollection, mintParams } from './NFTCollection';
+  import { TonClient } from "ton";
   
   export class NftItem {
     private collection: NftCollection;
@@ -29,6 +30,22 @@
       });
       return seqno;
 
+    }
+
+    static async getAddressByIndex(
+      collectionAddress: Address,
+      itemIndex: number,
+    ): Promise<Address> {
+      const client = new TonClient({
+        endpoint: "https://testnet.toncenter.com/api/v2/jsonRPC",
+        apiKey: process.env.TONCENTER_API_KEY,
+      });
+      const response = await client.runMethod(
+        collectionAddress,
+        "get_nft_address_by_index",
+        [{ type: "int", value: BigInt(itemIndex) }]
+      );
+      return response.stack.readAddress();
     }
     
 

@@ -140,22 +140,7 @@ import {
         return body.endCell();
       }
       
-      static async getAddressByIndex(
-        collectionAddress: Address,
-        itemIndex: number
-      ): Promise<Address> {
-        const client = new TonClient({
-          endpoint: "https://testnet.toncenter.com/api/v2/jsonRPC",
-          apiKey: process.env.TONCENTER_API_KEY,
-        });
-        const response = await client.runMethod(
-            collectionAddress,
-            "get_nft_address_by_index",
-            [{ type: "int", value: BigInt(itemIndex) }]
-          );
-          return response.stack.readAddress();
-      }
-      
+     
 
     }
 
