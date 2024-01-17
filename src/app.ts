@@ -1,6 +1,7 @@
 import * as dotenv from "dotenv";
 import { updateMetadataFiles, uploadFolderToIPFS } from "./metadata";
 import { NftItem } from '../contracts/NftItem';
+import { NftMarketplace } from '../contracts/NftMarketplace';
 import { NftCollection,  } from '../contracts/NFTCollection';
 import { openWallet } from "./utils";
 import { waitSeqno } from "./delay";
@@ -70,6 +71,13 @@ async function init() {
       await waitSeqno(seqno, wallet);
       index++;
     }
+
+    console.log("Start deploy of new marketplace  ");
+    const marketplace = new NftMarketplace(wallet.contract.address);
+    seqno = await marketplace.deploy(wallet);
+    await waitSeqno(seqno, wallet);
+    console.log("Successfully deployed new marketplace");
+
   }
   
 
