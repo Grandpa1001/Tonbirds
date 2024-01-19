@@ -1,5 +1,5 @@
 https://gateway.pinata.cloud/ipfs/QmTPSH7bkExWcrdXXwQvhN72zDXK9pZzH3AGbCw13f6Lwx
 
 
-Deploy sale contract
+Nice, now we can we are already very close to the end. Back to the app.ts and let's get address of our nft, that we want to put on sale:
 https://docs.ton.org/develop/dapps/tutorials/collection-minting
