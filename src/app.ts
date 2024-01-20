@@ -1,12 +1,12 @@
 import * as dotenv from "dotenv";
 import { updateMetadataFiles, uploadFolderToIPFS } from "./metadata";
 import { NftItem } from '../contracts/NftItem';
-import { NftMarketplace } from '../contracts/NftMarketplace';
+import { NftMarketplace, NftSale, GetGemsSaleData } from '../contracts/NftMarketplace';
 import { NftCollection,  } from '../contracts/NFTCollection';
 import { openWallet } from "./utils";
 import { waitSeqno } from "./delay";
 import { readdir } from "fs/promises";
-import {  toNano,
+import {  toNano, 
 } from "ton-core";
 
 
@@ -77,6 +77,26 @@ async function init() {
     seqno = await marketplace.deploy(wallet);
     await waitSeqno(seqno, wallet);
     console.log("Successfully deployed new marketplace");
+
+    const nftToSaleAddress = await NftItem.getAddressByIndex(collection.address, 0);
+    const saleData: GetGemsSaleData = {
+      isComplete: false,
+      createdAt: Math.ceil(Date.now() / 1000),
+      marketplaceAddress: marketplace.address,
+      nftAddress: nftToSaleAddress,
+      nftOwnerAddress: null,
+      fullPrice: toNano("10"),
+      marketplaceFeeAddress: wallet.contract.address,
+      marketplaceFee: toNano("1"),
+      royaltyAddress: wallet.contract.address,
+      royaltyAmount: toNano("0.5"),
+    };
+
+    const nftSaleContract = new NftSale(saleData);
+    seqno = await nftSaleContract.deploy(wallet);
+    await waitSeqno(seqno, wallet);
+    await NftItem.transfer(wallet, nftToSaleAddress, nftSaleContract.address);
+
 
   }
   
